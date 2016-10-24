@@ -1,0 +1,24 @@
+{
+  "name": "how-to-graphql",
+  "version": "1.0.0",
+  "description": "Example graphql server",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stayradiated/how-to-graphql.git"
+  },
+  "author": "George Czabania <george@czabania.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stayradiated/how-to-graphql/issues"
+  },
+  "homepage": "https://github.com/stayradiated/how-to-graphql#readme",
+  "dependencies": {
+    "apollo-server": "^0.3.3",
+    "express": "4.14.0",
+    "graphql": "0.7.2",
+    "graphql-server-express": "0.4.3",
+    "graphql-tools": "^0.8.0",
+    "producthunt": "0.2.0"
+  }
+}
