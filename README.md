@@ -33,7 +33,7 @@ GraphQL = Graph **Query Language**.
 
 Built by Facebook several years ago, released as open source last year.
 
-<img src="./img/fb.png" class="center" />
+<img src="./docs/img/fb.png" class="center" />
 
 It's a spec, and it's platform agnostic.
 
@@ -46,7 +46,7 @@ RESTful web API's can be pretty good.
 - `GET /users/123`
 - `POST /users`
 
-<img src="./img/cloud.png" class="center" />
+<img src="./docs/img/cloud.png" class="center" />
 
 --
 
@@ -61,7 +61,7 @@ When a client needs to make multiple requests to get all the data it needs.
 
 --
 
-![](./img/rest_1.png)
+![](./docs/img/rest_1.png)
 
 --
 
@@ -77,7 +77,7 @@ But increases the size of the response.
 
 --
 
-![](./img/rest_2.png)
+![](./docs/img/rest_2.png)
 
 --
 
@@ -93,19 +93,19 @@ GraphQL takes this idea and builds a language out of it.
 
 --
 
-![](./img/rest_3.png)
+![](./docs/img/rest_3.png)
 
 --
 
 ### Working with Multiple APIs
 
-![](./img/multiple_apis.png)
+![](./docs/img/multiple_apis.png)
 
 --
 
 ### Working with Multiple APIs
 
-![](./img/multiple_apis_2.png)
+![](./docs/img/multiple_apis_2.png)
 
 --
 
@@ -247,7 +247,7 @@ const query = `
 
 ### Example Backend API
 
-<img src="./img/store.png" class="float-right" />
+<img src="./docs/img/store.png" class="float-right" />
 
 - `store.getUser(id)`
 - `store.getUsers([id])`
