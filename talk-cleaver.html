@@ -356,6 +356,7 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 }
 
 .slide-content {
+  position: relative;
   overflow: auto;
 }
 
@@ -389,8 +390,15 @@ img.center {
   display: block;
   width: auto;
   height: auto;
-  max-width: 100%;
+  max-width: 300px;
   margin: 0 auto;
+}
+
+img.float-right {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  right: 0;
 }
 
   </style>
@@ -437,6 +445,7 @@ img.center {
 <li><code>GET /users/123</code></li>
 <li><code>POST /users</code></li>
 </ul>
+<p><img src="./img/cloud.png" class="center" /></p>
 </section>
   </div>
   <div class="slide hidden" id="slide-7">
@@ -473,8 +482,7 @@ img.center {
 <p>We could add an option to embed the values we care about in the API.</p>
 <p><code>GET /videos/123?embed=history,recommended</code></p>
 <p>Then only the clients that need that info can request it</p>
-<p>GraphQL takes this idea and builds a language out of it.
-POST /graphql with your query</p>
+<p>GraphQL takes this idea and builds a language out of it.</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-12">
@@ -482,71 +490,60 @@ POST /graphql with your query</p>
 </section>
   </div>
   <div class="slide hidden" id="slide-13">
-    <section class="slide-content"><h1 id="a-single-request-fulfils-exactly-the-client-s-needs-">A single request fulfils exactly the client&#39;s needs.</h1>
+    <section class="slide-content"><h3 id="working-with-multiple-apis">Working with Multiple APIs</h3>
+<p><img src="./img/multiple_apis.png" alt=""></p>
 </section>
   </div>
   <div class="slide hidden" id="slide-14">
-    <section class="slide-content"><h3 id="writing-a-query">Writing a Query</h3>
-<pre><code>query {</code></pre>
-<pre><code>  user(id: 43) {</code></pre>
-<pre><code>    name</code></pre>
-<pre><code>    avatar {
-      small
-    }</code></pre>
-<pre><code>    history {
-      title
-      date</code></pre>
-<pre><code>      image {
-        large
-      }
-    }</code></pre>
-<pre><code>  }
-}</code></pre>
-<pre><code class="lang-json">{
-  "<span class="hljs-attr">user</span>": {
-    "<span class="hljs-attr">name</span>": <span class="hljs-string">"George Czabania"</span>,
-
-    "<span class="hljs-attr">avatar</span>": {
-      "<span class="hljs-attr">small</span>": <span class="hljs-string">"http://..."</span>
-    },
-
-    "<span class="hljs-attr">history</span>": [{
-      "<span class="hljs-attr">title</span>": <span class="hljs-string">"Video 1"</span>,
-      "<span class="hljs-attr">date</span>": <span class="hljs-string">"2016-10-25"</span>,
-      "<span class="hljs-attr">image</span>": {
-        "<span class="hljs-attr">large</span>": <span class="hljs-string">"http://..."</span>
-      }
-
-    }, {
-      "<span class="hljs-attr">title</span>": <span class="hljs-string">"Video 2"</span>,
-      "<span class="hljs-attr">date</span>": <span class="hljs-string">"2016-10-24"</span>,
-      "<span class="hljs-attr">image</span>": {
-        "<span class="hljs-attr">large</span>": <span class="hljs-string">"http://..."</span>
-      }
-    }]
-  }
-}</code></pre>
+    <section class="slide-content"><h3 id="working-with-multiple-apis">Working with Multiple APIs</h3>
+<p><img src="./img/multiple_apis_2.png" alt=""></p>
 </section>
   </div>
   <div class="slide hidden" id="slide-15">
-    <section class="slide-content"><h1 id="demo">Demo</h1>
+    <section class="slide-content"><h1 id="a-single-request-fulfils-exactly-the-client-s-needs-">A single request fulfils exactly the client&#39;s needs.</h1>
 </section>
   </div>
   <div class="slide hidden" id="slide-16">
-    <section class="slide-content"><h3 id="command-line">Command Line</h3>
-<ul>
-<li>Get All Users: <code>http http://localhost:5000/graphql query=&#39;{users {username}}&#39;</code></li>
-<li>Include Videos: <code>http http://localhost:5000/graphql query=&#39;{users {username videos {title}}}&#39;</code></li>
-</ul>
+    <section class="slide-content"><h3 id="writing-a-query">Writing a Query</h3>
+<pre><code>QUERY                                RESPONSE
+=====                                ========
+
+{                                    {</code></pre>
+<pre><code>  user(id: 43) {                       &quot;user&quot;: {</code></pre>
+<pre><code>    name                                 &quot;name&quot;: &quot;John Smith&quot;,</code></pre>
+<pre><code>    avatar {                             &quot;avatar&quot;: {
+      small                                &quot;small&quot;: &quot;http://...&quot;,
+    }                                    }</code></pre>
+<pre><code>    history {                            &quot;history&quot;: [{
+      title                                &quot;title&quot;: &quot;Video 1&quot;,
+      date                                 &quot;date&quot;: &quot;2016-10-25&quot;,</code></pre>
+<pre><code>      image {                              &quot;image&quot;: {
+        large                                &quot;large&quot;: &quot;http://...&quot;,
+      }                                    }
+    }                                    }]</code></pre>
+<pre><code>  }                                    }
+}                                    }</code></pre>
 </section>
   </div>
   <div class="slide hidden" id="slide-17">
+    <section class="slide-content"><h1 id="demo">Demo</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-18">
+    <section class="slide-content"><h3 id="command-line">Command Line</h3>
+<p><strong>Get All Users</strong></p>
+<pre><code>http http://localhost:5000/graphql query=&#39;{users {username}}&#39;</code></pre>
+<p><strong>Get All Users &amp; Include Videos</strong></p>
+<pre><code>http http://localhost:5000/graphql query=&#39;{users {username videos {title}}}&#39;</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-19">
     <section class="slide-content"><h3 id="graphiql">GraphiQL</h3>
 <p><a href="http://localhost:5000/graphiql">Launch GraphiQL</a></p>
 <p><a href="https://developer.github.com/early-access/graphql/explorer/">Github GraphQL Explorer</a></p>
 </section>
   </div>
-  <div class="slide hidden" id="slide-18">
+  <div class="slide hidden" id="slide-20">
     <section class="slide-content"><h3 id="passing-variables">Passing Variables</h3>
 <p>Try to avoid inlining variables.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
@@ -572,12 +569,13 @@ POST /graphql with your query</p>
 `</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-19">
+  <div class="slide hidden" id="slide-21">
     <section class="slide-content"><h1 id="building-a-graphql-server-from-scratch">Building a GraphQL Server from scratch</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-20">
-    <section class="slide-content"><h3 id="sample-store">Sample Store</h3>
+  <div class="slide hidden" id="slide-22">
+    <section class="slide-content"><h3 id="example-backend-api">Example Backend API</h3>
+<p><img src="./img/store.png" class="float-right" /></p>
 <ul>
 <li><code>store.getUser(id)</code></li>
 <li><code>store.getUsers([id])</code></li>
@@ -586,14 +584,14 @@ POST /graphql with your query</p>
 <ul>
 <li><code>store.getVideo(id)</code></li>
 <li><code>store.getVideos([id])</code></li>
-<li><p><code>store.getAllVideos()</code></p>
-</li>
-<li><p><code>store.createUser()</code></p>
-</li>
+<li><code>store.getAllVideos()</code></li>
+</ul>
+<ul>
+<li><code>store.createUser()</code></li>
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-21">
+  <div class="slide hidden" id="slide-23">
     <section class="slide-content"><h3 id="sample-data">Sample Data</h3>
 <p><strong>User</strong></p>
 <pre><code class="lang-json">{
@@ -615,7 +613,7 @@ POST /graphql with your query</p>
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-22">
+  <div class="slide hidden" id="slide-24">
     <section class="slide-content"><h3 id="schema">Schema</h3>
 <pre><code>type User {
   id: Int
@@ -636,7 +634,7 @@ POST /graphql with your query</p>
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-23">
+  <div class="slide hidden" id="slide-25">
     <section class="slide-content"><h3 id="getting-started">Getting started</h3>
 <p>All the GraphQL variables are from the <code>graphql</code> package.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {
@@ -647,7 +645,7 @@ POST /graphql with your query</p>
 } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql'</span>)</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-24">
+  <div class="slide hidden" id="slide-26">
     <section class="slide-content"><h3 id="defining-the-types">Defining The Types</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoType = <span class="hljs-keyword">new</span> GraphQLObjectType({
   name: <span class="hljs-string">'Video'</span>,
@@ -679,7 +677,7 @@ POST /graphql with your query</p>
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-25">
+  <div class="slide hidden" id="slide-27">
     <section class="slide-content"><h3 id="adding-resolvers">Adding Resolvers</h3>
 <p><strong>Videos</strong></p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoType = <span class="hljs-keyword">new</span> GraphQLObjectType({
@@ -712,7 +710,7 @@ POST /graphql with your query</p>
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-26">
+  <div class="slide hidden" id="slide-28">
     <section class="slide-content"><h3 id="the-root-query">The Root Query</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> QueryType = <span class="hljs-keyword">new</span> GraphQLObjectType({
   name: <span class="hljs-string">'Query'</span>,
@@ -732,7 +730,7 @@ POST /graphql with your query</p>
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-27">
+  <div class="slide hidden" id="slide-29">
     <section class="slide-content"><h3 id="mutations">Mutations</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> MutationType = <span class="hljs-keyword">new</span> GraphQLObjectType({
   name: <span class="hljs-string">'Mutaton'</span>,
@@ -748,7 +746,7 @@ POST /graphql with your query</p>
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden  " id="slide-28">
+  <div class="slide hidden  " id="slide-30">
     <section class="slide-content"><h3 id="the-schema">The Schema</h3>
 <p>The <code>query</code> field is required.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> schema = <span class="hljs-keyword">new</span> GraphQLSchema({
@@ -757,7 +755,7 @@ POST /graphql with your query</p>
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-29">
+  <div class="slide hidden" id="slide-31">
     <section class="slide-content"><h3 id="executing-a-query">Executing a Query</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {graphql} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql'</span>)</code></pre>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
@@ -793,10 +791,10 @@ POST /graphql with your query</p>
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-30">
+  <div class="slide hidden" id="slide-32">
     <section class="slide-content"><h3 id="executing-a-mutation">Executing a Mutation</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
-  mutation {
+  mutation createNewUser {
     createUser(name: "Jeremy") {
       id
       username
@@ -820,7 +818,7 @@ POST /graphql with your query</p>
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-31">
+  <div class="slide hidden" id="slide-33">
     <section class="slide-content"><h3 id="let-s-make-a-web-server">Let&#39;s make a web server</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> Express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)
 <span class="hljs-keyword">const</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>)
@@ -835,7 +833,7 @@ POST /graphql with your query</p>
 <pre><code class="lang-javascript">app.listen(<span class="hljs-number">5000</span>, () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Listening on port 5000'</span>))</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-32">
+  <div class="slide hidden" id="slide-34">
     <section class="slide-content"><h3 id="the-new-way-to-write-a-schema">The new way to write a Schema</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> typeDefs = <span class="hljs-string">`
 schema {
@@ -895,11 +893,38 @@ type VideoSource {
 <span class="hljs-keyword">const</span> schema = makeExecutableSchema({typeDefs, resolvers})</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-33">
-    <section class="slide-content"><h2 id="questions-">Questions?</h2>
+  <div class="slide hidden" id="slide-35">
+    <section class="slide-content"><h1 id="challenges">Challenges</h1>
 </section>
   </div>
-  <div class="slide hidden author-slide" id="slide-34">
+  <div class="slide hidden" id="slide-36">
+    <section class="slide-content"><h3 id="server-performance">Server Performance</h3>
+<ul>
+<li>Sometimes need to return a lot of data</li>
+<li>Batching + Caching</li>
+<li>Facebook Data Loader</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-37">
+    <section class="slide-content"><h3 id="security">Security</h3>
+<ul>
+<li>Can&#39;t restrict based on endpoint</li>
+<li>Can check user permissions when resolving each part of the query</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-38">
+    <section class="slide-content"><h3 id="protecting-the-server">Protecting the Server</h3>
+<ul>
+<li>Deeply nested queries use up the server capacity</li>
+<li>Facebook: persisted approved queries</li>
+<li>Timeout on computation time</li>
+<li>Complexity analysis</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden author-slide" id="slide-39">
     <section class="slide-content"><div class="author">
   <h1 class="name">George Czabania</h1>
     <h3 class="twitter">

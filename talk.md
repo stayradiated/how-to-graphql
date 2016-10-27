@@ -46,6 +46,8 @@ RESTful web API's can be pretty good.
 - `GET /users/123`
 - `POST /users`
 
+<img src="./img/cloud.png" class="center" />
+
 --
 
 #### But they can have some issues
@@ -88,11 +90,22 @@ We could add an option to embed the values we care about in the API.
 Then only the clients that need that info can request it
 
 GraphQL takes this idea and builds a language out of it.
-POST /graphql with your query
 
 --
 
 ![](./img/rest_3.png)
+
+--
+
+### Working with Multiple APIs
+
+![](./img/multiple_apis.png)
+
+--
+
+### Working with Multiple APIs
+
+![](./img/multiple_apis_2.png)
 
 --
 
@@ -103,60 +116,36 @@ POST /graphql with your query
 ### Writing a Query
 
 ```
-query {
-```
-```
-  user(id: 43) {
-```
-```
-    name
-```
-```
-    avatar {
-      small
-    }
-```
-```
-    history {
-      title
-      date
-```
-```
-      image {
-        large
-      }
-    }
-```
-```
-  }
-}
-```
+QUERY                                RESPONSE
+=====                                ========
 
-```json
-{
-  "user": {
-    "name": "George Czabania",
-
-    "avatar": {
-      "small": "http://..."
-    },
-
-    "history": [{
-      "title": "Video 1",
-      "date": "2016-10-25",
-      "image": {
-        "large": "http://..."
-      }
-
-    }, {
-      "title": "Video 2",
-      "date": "2016-10-24",
-      "image": {
-        "large": "http://..."
-      }
-    }]
-  }
-}
+{                                    {
+```
+```
+  user(id: 43) {                       "user": {
+```
+```
+    name                                 "name": "John Smith",
+```
+```
+    avatar {                             "avatar": {
+      small                                "small": "http://...",
+    }                                    }
+```
+```
+    history {                            "history": [{
+      title                                "title": "Video 1",
+      date                                 "date": "2016-10-25",
+```
+```
+      image {                              "image": {
+        large                                "large": "http://...",
+      }                                    }
+    }                                    }]
+```
+```
+  }                                    }
+}                                    }
 ```
 
 --
@@ -167,8 +156,17 @@ query {
 
 ### Command Line
 
-- Get All Users: `http http://localhost:5000/graphql query='{users {username}}'`
-- Include Videos: `http http://localhost:5000/graphql query='{users {username videos {title}}}'`
+**Get All Users**
+
+```
+http http://localhost:5000/graphql query='{users {username}}'
+```
+
+**Get All Users & Include Videos**
+
+```
+http http://localhost:5000/graphql query='{users {username videos {title}}}'
+```
 
 --
 
@@ -218,7 +216,9 @@ const query = `
 
 --
 
-### Sample Store
+### Example Backend API
+
+<img src="./img/store.png" class="float-right" />
 
 - `store.getUser(id)`
 - `store.getUsers([id])`
@@ -228,6 +228,7 @@ const query = `
 - `store.getVideo(id)`
 - `store.getVideos([id])`
 - `store.getAllVideos()`
+
 
 - `store.createUser()`
 
@@ -643,4 +644,28 @@ const schema = makeExecutableSchema({typeDefs, resolvers})
 
 --
 
-## Questions?
+# Challenges
+
+--
+
+### Server Performance
+
+- Sometimes need to return a lot of data
+- Batching + Caching
+- Facebook Data Loader
+
+--
+
+### Security
+
+- Can't restrict based on endpoint
+- Can check user permissions when resolving each part of the query
+
+--
+
+### Protecting the Server
+
+- Deeply nested queries use up the server capacity
+- Facebook: persisted approved queries
+- Timeout on computation time
+- Complexity analysis

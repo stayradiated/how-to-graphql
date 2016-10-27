@@ -1,4 +1,5 @@
 .slide-content {
+  position: relative;
   overflow: auto;
 }
 
@@ -32,6 +33,13 @@ img.center {
   display: block;
   width: auto;
   height: auto;
-  max-width: 100%;
+  max-width: 300px;
   margin: 0 auto;
+}
+
+img.float-right {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  right: 0;
 }
