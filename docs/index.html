@@ -418,7 +418,7 @@ img.float-right {
 <li><strong>Intro</strong>: What is GraphQL and why it is so awesome</li>
 <li><strong>Demo</strong>: Querying a GraphQL server</li>
 <li><strong>Tutorial</strong>: How to setup a GraphQL server from scratch</li>
-<li><strong>Outro</strong>: Problems, solutions, projects</li>
+<li><strong>Challenges</strong>: Things to consider</li>
 </ol>
 </section>
   </div>
@@ -544,11 +544,34 @@ img.float-right {
 </section>
   </div>
   <div class="slide hidden" id="slide-20">
+    <section class="slide-content"><h3 id="example-query">Example Query</h3>
+<pre><code>query {
+  users {
+    username
+
+    videos {
+      title
+    }
+  }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-21">
+    <section class="slide-content"><h3 id="example-mutation">Example Mutation</h3>
+<pre><code>mutation {
+  createUser(name: &quot;George&quot;) {
+    id
+    username
+  }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-22">
     <section class="slide-content"><h3 id="passing-variables">Passing Variables</h3>
 <p>Try to avoid inlining variables.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
   {
-    users(name: "<span class="hljs-subst">${name}</span>") {
+    user(id: "<span class="hljs-subst">${userID}</span>") {
       id
       videos {
         title
@@ -558,8 +581,8 @@ img.float-right {
 `</span></code></pre>
 <p>Instead, use variables.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
-  query getUserVideos($name: String!) {
-    users(name: $name) {
+  query getUserVideos($userID: Int!) {
+    user(id: $userID) {
       id
       videos {
         title
@@ -569,11 +592,11 @@ img.float-right {
 `</span></code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-21">
+  <div class="slide hidden" id="slide-23">
     <section class="slide-content"><h1 id="building-a-graphql-server-from-scratch">Building a GraphQL Server from scratch</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-22">
+  <div class="slide hidden" id="slide-24">
     <section class="slide-content"><h3 id="example-backend-api">Example Backend API</h3>
 <p><img src="./img/store.png" class="float-right" /></p>
 <ul>
@@ -591,7 +614,7 @@ img.float-right {
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-23">
+  <div class="slide hidden" id="slide-25">
     <section class="slide-content"><h3 id="sample-data">Sample Data</h3>
 <p><strong>User</strong></p>
 <pre><code class="lang-json">{
@@ -613,7 +636,7 @@ img.float-right {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-24">
+  <div class="slide hidden" id="slide-26">
     <section class="slide-content"><h3 id="schema">Schema</h3>
 <pre><code>type User {
   id: Int
@@ -634,7 +657,7 @@ img.float-right {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-25">
+  <div class="slide hidden" id="slide-27">
     <section class="slide-content"><h3 id="getting-started">Getting started</h3>
 <p>All the GraphQL variables are from the <code>graphql</code> package.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {
@@ -645,7 +668,7 @@ img.float-right {
 } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql'</span>)</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-26">
+  <div class="slide hidden" id="slide-28">
     <section class="slide-content"><h3 id="defining-the-types">Defining The Types</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoType = <span class="hljs-keyword">new</span> GraphQLObjectType({
   name: <span class="hljs-string">'Video'</span>,
@@ -677,7 +700,7 @@ img.float-right {
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-27">
+  <div class="slide hidden" id="slide-29">
     <section class="slide-content"><h3 id="adding-resolvers">Adding Resolvers</h3>
 <p><strong>Videos</strong></p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoType = <span class="hljs-keyword">new</span> GraphQLObjectType({
@@ -710,7 +733,7 @@ img.float-right {
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-28">
+  <div class="slide hidden" id="slide-30">
     <section class="slide-content"><h3 id="the-root-query">The Root Query</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> QueryType = <span class="hljs-keyword">new</span> GraphQLObjectType({
   name: <span class="hljs-string">'Query'</span>,
@@ -730,7 +753,7 @@ img.float-right {
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-29">
+  <div class="slide hidden" id="slide-31">
     <section class="slide-content"><h3 id="mutations">Mutations</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> MutationType = <span class="hljs-keyword">new</span> GraphQLObjectType({
   name: <span class="hljs-string">'Mutaton'</span>,
@@ -746,7 +769,7 @@ img.float-right {
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden  " id="slide-30">
+  <div class="slide hidden  " id="slide-32">
     <section class="slide-content"><h3 id="the-schema">The Schema</h3>
 <p>The <code>query</code> field is required.</p>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> schema = <span class="hljs-keyword">new</span> GraphQLSchema({
@@ -755,7 +778,7 @@ img.float-right {
 })</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-31">
+  <div class="slide hidden" id="slide-33">
     <section class="slide-content"><h3 id="executing-a-query">Executing a Query</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {graphql} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql'</span>)</code></pre>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
@@ -791,7 +814,7 @@ img.float-right {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-32">
+  <div class="slide hidden" id="slide-34">
     <section class="slide-content"><h3 id="executing-a-mutation">Executing a Mutation</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
   mutation createNewUser {
@@ -818,7 +841,7 @@ img.float-right {
 }</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-33">
+  <div class="slide hidden" id="slide-35">
     <section class="slide-content"><h3 id="let-s-make-a-web-server">Let&#39;s make a web server</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> Express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)
 <span class="hljs-keyword">const</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>)
@@ -833,7 +856,7 @@ img.float-right {
 <pre><code class="lang-javascript">app.listen(<span class="hljs-number">5000</span>, () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Listening on port 5000'</span>))</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-34">
+  <div class="slide hidden" id="slide-36">
     <section class="slide-content"><h3 id="the-new-way-to-write-a-schema">The new way to write a Schema</h3>
 <pre><code class="lang-javascript"><span class="hljs-keyword">const</span> typeDefs = <span class="hljs-string">`
 schema {
@@ -893,11 +916,11 @@ type VideoSource {
 <span class="hljs-keyword">const</span> schema = makeExecutableSchema({typeDefs, resolvers})</code></pre>
 </section>
   </div>
-  <div class="slide hidden" id="slide-35">
+  <div class="slide hidden" id="slide-37">
     <section class="slide-content"><h1 id="challenges">Challenges</h1>
 </section>
   </div>
-  <div class="slide hidden" id="slide-36">
+  <div class="slide hidden" id="slide-38">
     <section class="slide-content"><h3 id="server-performance">Server Performance</h3>
 <ul>
 <li>Sometimes need to return a lot of data</li>
@@ -906,7 +929,7 @@ type VideoSource {
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-37">
+  <div class="slide hidden" id="slide-39">
     <section class="slide-content"><h3 id="security">Security</h3>
 <ul>
 <li>Can&#39;t restrict based on endpoint</li>
@@ -914,7 +937,7 @@ type VideoSource {
 </ul>
 </section>
   </div>
-  <div class="slide hidden" id="slide-38">
+  <div class="slide hidden" id="slide-40">
     <section class="slide-content"><h3 id="protecting-the-server">Protecting the Server</h3>
 <ul>
 <li>Deeply nested queries use up the server capacity</li>
@@ -924,7 +947,7 @@ type VideoSource {
 </ul>
 </section>
   </div>
-  <div class="slide hidden author-slide" id="slide-39">
+  <div class="slide hidden author-slide" id="slide-41">
     <section class="slide-content"><div class="author">
   <h1 class="name">George Czabania</h1>
     <h3 class="twitter">

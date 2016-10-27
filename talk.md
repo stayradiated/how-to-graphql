@@ -15,7 +15,7 @@ style: style.css
 1. **Intro**: What is GraphQL and why it is so awesome
 2. **Demo**: Querying a GraphQL server
 3. **Tutorial**: How to setup a GraphQL server from scratch
-4. **Outro**: Problems, solutions, projects
+4. **Challenges**: Things to consider
 
 --
 
@@ -178,6 +178,35 @@ http http://localhost:5000/graphql query='{users {username videos {title}}}'
 
 --
 
+### Example Query
+
+```
+query {
+  users {
+    username
+    
+    videos {
+      title
+    }
+  }
+}
+```
+
+--
+
+### Example Mutation
+
+```
+mutation {
+  createUser(name: "George") {
+    id
+    username
+  }
+}
+```
+
+--
+
 ### Passing Variables
 
 Try to avoid inlining variables.
@@ -185,7 +214,7 @@ Try to avoid inlining variables.
 ```javascript
 const query = `
   {
-    users(name: "${name}") {
+    user(id: "${userID}") {
       id
       videos {
         title
@@ -199,8 +228,8 @@ Instead, use variables.
 
 ```javascript
 const query = `
-  query getUserVideos($name: String!) {
-    users(name: $name) {
+  query getUserVideos($userID: Int!) {
+    user(id: $userID) {
       id
       videos {
         title
