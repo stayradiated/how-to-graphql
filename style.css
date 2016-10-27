@@ -1,0 +1,37 @@
+.slide-content {
+  overflow: auto;
+}
+
+pre code {
+  display: block;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  font-family: 'Code New Roman';
+}
+
+li code:hover,
+pre code:hover {
+  opacity: 1;
+}
+
+code.lang-fade:hover {
+  opacity: 0.4;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+small {
+  font-size: 0.6em;
+  margin: 0;
+}
+
+img.center {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}

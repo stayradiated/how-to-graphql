@@ -1,0 +1,1072 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>GraphQL</title>
+  <style type="text/css">
+    body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #222;
+  font-size: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+  background-color: #f7f7f7;
+}
+
+.slide-content {
+  width: 800px;
+  height: 600px;
+  overflow: hidden;
+  margin: 80px auto 0 auto;
+  padding: 30px;
+
+  font-weight: 200;
+  font-size: 200%;
+  line-height: 1.375;
+}
+
+.controls {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+.arrow {
+  width: 0; height: 0;
+  border: 30px solid #333;
+  float: left;
+  margin-right: 30px;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.prev {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+
+  border-left-width: 0;
+  border-right-width: 50px;
+}
+
+.next {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+
+  border-left-width: 50px;
+  border-right-width: 0;
+}
+
+.prev:hover {
+  border-right-color: #888;
+  cursor: pointer;
+}
+
+.next:hover {
+  border-left-color: #888;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 300%;
+  line-height: 1.2;
+  text-align: center;
+  margin: 170px 0 0;
+}
+
+h2 {
+  font-size: 100%;
+  line-height: 1.2;
+  margin: 5px 0;
+  text-align: center;
+  font-weight: 200;
+}
+
+h3 {
+  font-size: 140%;
+  line-height: 1.2;
+  border-bottom: 1px solid #aaa;
+  margin: 0;
+  padding-bottom: 15px;
+}
+
+ul {
+  padding: 20px 0 0 60px;
+  font-weight: 200;
+  line-height: 1.375;
+}
+
+.author h1 {
+  font-size: 170%;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.author h3 {
+  font-weight: 100;
+  text-align: center;
+  font-size: 95%;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: #44a4dd;
+}
+
+a:hover {
+  color: #66b5ff;
+}
+
+pre {
+  font-size: 60%;
+  line-height: 1.3;
+}
+
+.progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 3px;
+  background-color: #b4b4b4;
+
+  -webkit-transition: width 0.05s ease-out;
+  -moz-transition: width 0.05s ease-out;
+  -o-transition: width 0.05s ease-out;
+  transition: width 0.05s ease-out;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 850px) {
+
+  body {
+    font-size: 70%;
+  }
+
+  .slide-content {
+    width: auto;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  h1 {
+    margin-top: 120px;
+  }
+
+  .prev, .prev:hover {
+    border-right-color: rgba(135, 135, 135, 0.5);
+  }
+
+  .next, .next:hover {
+    border-left-color: rgba(135, 135, 135, 0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 50%;
+    overflow: hidden;
+  }
+
+  .slide-content {
+    padding: 10px;
+    margin-top: 10px;
+    height: 340px;
+  }
+
+  h1 {
+    margin-top: 50px;
+  }
+
+  ul {
+    padding-left: 25px;
+  }
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+  }
+
+  @page {
+    size: letter;
+  }
+
+  .hidden {
+    display: inline;
+  }
+
+  html {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  body {
+    margin: 0 auto !important;
+    border: 0;
+    padding: 0;
+    float: none !important;
+    overflow: visible;
+    background: none !important;
+    font-size: 52%;
+  }
+
+  .progress, .controls {
+    display: none;
+  }
+
+  .slide {
+    position: static;
+  }
+
+  .slide-content {
+    border: 1px solid #222;
+    margin-top: 0;
+    margin-bottom: 40px;
+    height: 3.5in;
+    overflow: visible;
+  }
+
+  .slide:nth-child(even) {
+    /* 2 slides per page */
+    page-break-before: always;
+  }
+}
+
+/*
+
+github.com style (c) Vasily Polovnyov <vast@whiteants.net>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  color: #333;
+  background: #f8f8f8;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #998;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst {
+  color: #333;
+  font-weight: bold;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #008080;
+}
+
+.hljs-string,
+.hljs-doctag {
+  color: #d14;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #900;
+  font-weight: bold;
+}
+
+.hljs-subst {
+  font-weight: normal;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #458;
+  font-weight: bold;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #000080;
+  font-weight: normal;
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: #009926;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #990073;
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #0086b3;
+}
+
+.hljs-meta {
+  color: #999;
+  font-weight: bold;
+}
+
+.hljs-deletion {
+  background: #fdd;
+}
+
+.hljs-addition {
+  background: #dfd;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
+
+.slide-content {
+  overflow: auto;
+}
+
+pre code {
+  display: block;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+  font-family: 'Code New Roman';
+}
+
+li code:hover,
+pre code:hover {
+  opacity: 1;
+}
+
+code.lang-fade:hover {
+  opacity: 0.4;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+small {
+  font-size: 0.6em;
+  margin: 0;
+}
+
+img.center {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+  </style>
+</head>
+<body>
+    <div class="progress">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="slide" id="slide-1">
+    <section class="slide-content"><h1 id="intro-to-graphql">Intro to GraphQL</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-2">
+    <section class="slide-content"><h3 id="what-am-i-talking-about">What Am I Talking About</h3>
+<ol>
+<li><strong>Intro</strong>: What is GraphQL and why it is so awesome</li>
+<li><strong>Demo</strong>: Querying a GraphQL server</li>
+<li><strong>Tutorial</strong>: How to setup a GraphQL server from scratch</li>
+<li><strong>Outro</strong>: Problems, solutions, projects</li>
+</ol>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-3">
+    <section class="slide-content"><h1 id="what-is-graphql-">What is GraphQL?</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-4">
+    <section class="slide-content"><h1 id="it-s-a-better-way-to-fetch-data">It&#39;s a better way to fetch data</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-5">
+    <section class="slide-content"><h3 id="about">About</h3>
+<p>GraphQL = Graph <strong>Query Language</strong>.</p>
+<p>Built by Facebook several years ago, released as open source last year.</p>
+<p><img src="./img/fb.png" class="center" /></p>
+<p>It&#39;s a spec, and it&#39;s platform agnostic.</p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-6">
+    <section class="slide-content"><h3 id="rest">REST</h3>
+<p>RESTful web API&#39;s can be pretty good.</p>
+<ul>
+<li><code>GET /users/123</code></li>
+<li><code>POST /users</code></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-7">
+    <section class="slide-content"><h4 id="but-they-can-have-some-issues">But they can have some issues</h4>
+<p>When a client needs to make multiple requests to get all the data it needs.</p>
+<ul>
+<li><code>GET /users/123</code></li>
+<li><code>GET /users/123/history</code></li>
+<li><code>GET /users/123/recommended</code></li>
+<li>...</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-8">
+    <section class="slide-content"><p><img src="./img/rest_1.png" alt=""></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-9">
+    <section class="slide-content"><h4 id="how-we-can-solve-this">How we can solve this</h4>
+<p>We could include extra information into a response.</p>
+<p>Which would cut down the number of API calls we have to make.</p>
+<p>But increases the size of the response.</p>
+<ul>
+<li><code>GET /users/123</code></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-10">
+    <section class="slide-content"><p><img src="./img/rest_2.png" alt=""></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-11">
+    <section class="slide-content"><h4 id="making-it-optional">Making it optional</h4>
+<p>We could add an option to embed the values we care about in the API.</p>
+<p><code>GET /videos/123?embed=history,recommended</code></p>
+<p>Then only the clients that need that info can request it</p>
+<p>GraphQL takes this idea and builds a language out of it.
+POST /graphql with your query</p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-12">
+    <section class="slide-content"><p><img src="./img/rest_3.png" alt=""></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-13">
+    <section class="slide-content"><h1 id="a-single-request-fulfils-exactly-the-client-s-needs-">A single request fulfils exactly the client&#39;s needs.</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-14">
+    <section class="slide-content"><h3 id="writing-a-query">Writing a Query</h3>
+<pre><code>query {</code></pre>
+<pre><code>  user(id: 43) {</code></pre>
+<pre><code>    name</code></pre>
+<pre><code>    avatar {
+      small
+    }</code></pre>
+<pre><code>    history {
+      title
+      date</code></pre>
+<pre><code>      image {
+        large
+      }
+    }</code></pre>
+<pre><code>  }
+}</code></pre>
+<pre><code class="lang-json">{
+  "<span class="hljs-attr">user</span>": {
+    "<span class="hljs-attr">name</span>": <span class="hljs-string">"George Czabania"</span>,
+
+    "<span class="hljs-attr">avatar</span>": {
+      "<span class="hljs-attr">small</span>": <span class="hljs-string">"http://..."</span>
+    },
+
+    "<span class="hljs-attr">history</span>": [{
+      "<span class="hljs-attr">title</span>": <span class="hljs-string">"Video 1"</span>,
+      "<span class="hljs-attr">date</span>": <span class="hljs-string">"2016-10-25"</span>,
+      "<span class="hljs-attr">image</span>": {
+        "<span class="hljs-attr">large</span>": <span class="hljs-string">"http://..."</span>
+      }
+
+    }, {
+      "<span class="hljs-attr">title</span>": <span class="hljs-string">"Video 2"</span>,
+      "<span class="hljs-attr">date</span>": <span class="hljs-string">"2016-10-24"</span>,
+      "<span class="hljs-attr">image</span>": {
+        "<span class="hljs-attr">large</span>": <span class="hljs-string">"http://..."</span>
+      }
+    }]
+  }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-15">
+    <section class="slide-content"><h1 id="demo">Demo</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-16">
+    <section class="slide-content"><h3 id="command-line">Command Line</h3>
+<ul>
+<li>Get All Users: <code>http http://localhost:5000/graphql query=&#39;{users {username}}&#39;</code></li>
+<li>Include Videos: <code>http http://localhost:5000/graphql query=&#39;{users {username videos {title}}}&#39;</code></li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-17">
+    <section class="slide-content"><h3 id="graphiql">GraphiQL</h3>
+<p><a href="http://localhost:5000/graphiql">Launch GraphiQL</a></p>
+<p><a href="https://developer.github.com/early-access/graphql/explorer/">Github GraphQL Explorer</a></p>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-18">
+    <section class="slide-content"><h3 id="passing-variables">Passing Variables</h3>
+<p>Try to avoid inlining variables.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
+  {
+    users(name: "<span class="hljs-subst">${name}</span>") {
+      id
+      videos {
+        title
+      }
+    }
+  }
+`</span></code></pre>
+<p>Instead, use variables.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
+  query getUserVideos($name: String!) {
+    users(name: $name) {
+      id
+      videos {
+        title
+      }
+    }
+  }
+`</span></code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-19">
+    <section class="slide-content"><h1 id="building-a-graphql-server-from-scratch">Building a GraphQL Server from scratch</h1>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-20">
+    <section class="slide-content"><h3 id="sample-store">Sample Store</h3>
+<ul>
+<li><code>store.getUser(id)</code></li>
+<li><code>store.getUsers([id])</code></li>
+<li><code>store.getAllUsers()</code></li>
+</ul>
+<ul>
+<li><code>store.getVideo(id)</code></li>
+<li><code>store.getVideos([id])</code></li>
+<li><p><code>store.getAllVideos()</code></p>
+</li>
+<li><p><code>store.createUser()</code></p>
+</li>
+</ul>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-21">
+    <section class="slide-content"><h3 id="sample-data">Sample Data</h3>
+<p><strong>User</strong></p>
+<pre><code class="lang-json">{
+  "<span class="hljs-attr">id</span>": <span class="hljs-number">1</span>,
+  "<span class="hljs-attr">username</span>": <span class="hljs-string">"Thomas.Pollich"</span>,
+  "<span class="hljs-attr">videos</span>": [ <span class="hljs-number">11</span>, <span class="hljs-number">23</span>, <span class="hljs-number">30</span> ],
+  "<span class="hljs-attr">followers</span>": [ <span class="hljs-number">5</span> ]
+}</code></pre>
+<p><strong>Video</strong></p>
+<pre><code class="lang-json">{
+  "<span class="hljs-attr">id</span>": <span class="hljs-string">"49"</span>,
+  "<span class="hljs-attr">user</span>": <span class="hljs-number">5</span>,
+  "<span class="hljs-attr">title</span>": <span class="hljs-string">"A Slight Case of August"</span>,
+  "<span class="hljs-attr">source</span>": {
+    "<span class="hljs-attr">low</span>": <span class="hljs-string">"https://75.146.219.97/videos/49.360.mp4"</span>,
+    "<span class="hljs-attr">med</span>": <span class="hljs-string">"https://75.146.219.97/videos/49.720.mp4"</span>,
+    "<span class="hljs-attr">high</span>": <span class="hljs-string">"https://75.146.219.97/videos/49.1080.mp4"</span>
+  }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-22">
+    <section class="slide-content"><h3 id="schema">Schema</h3>
+<pre><code>type User {
+  id: Int
+  username: String
+  videos: [Video]
+  followers: [User]
+}</code></pre>
+<pre><code>type Video {
+  id: Int
+  title: String
+  user: User
+  source: VideoSource
+}</code></pre>
+<pre><code>type VideoSource {
+  low: String
+  med: String
+  high: String
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-23">
+    <section class="slide-content"><h3 id="getting-started">Getting started</h3>
+<p>All the GraphQL variables are from the <code>graphql</code> package.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {
+  GraphQLInt,
+  GraphQLString,
+  GraphQLObjectType,
+  ...
+} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql'</span>)</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-24">
+    <section class="slide-content"><h3 id="defining-the-types">Defining The Types</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'Video'</span>,
+  description: <span class="hljs-string">'Information about a single video'</span>,
+  fields: () =&gt; ({
+    id:     { type: GraphQLInt },
+    title:  { type: GraphQLString },
+    user:   { type: UserType },
+    source: { type: VideoSourceType },
+  }),
+})</code></pre>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoSourceType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'VideoSource'</span>,
+  description: <span class="hljs-string">'URLs of varying quality for a video file'</span>,
+  fields: {
+    low:  { type: GraphQLString },
+    med:  { type: GraphQLString },
+    high: { type: GraphQLString },
+  },
+})</code></pre>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> UserType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'User'</span>,
+  description: <span class="hljs-string">'Information about a single user'</span>,
+  fields: () =&gt; ({
+    id:        { type: GraphQLInt },
+    username:  { type: GraphQLString },
+    videos:    { type: <span class="hljs-keyword">new</span> GraphQLList(VideoType) },
+    followers: { type: <span class="hljs-keyword">new</span> GraphQLList(UserType) },
+})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-25">
+    <section class="slide-content"><h3 id="adding-resolvers">Adding Resolvers</h3>
+<p><strong>Videos</strong></p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> VideoType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'Video'</span>,
+  fields: () =&gt; ({
+    id: {type: GraphQLInt},
+    title: {type: GraphQLString},</code></pre>
+<pre><code class="lang-javascript">    user: {
+      type: UserType,
+      resolve: (video) =&gt; store.getUser(video.user),
+    },</code></pre>
+<pre><code class="lang-javascript">    source: {type: VideoSourceType},
+  }),
+})</code></pre>
+<p><strong>Users</strong></p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> UserType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'User'</span>,
+  fields: () =&gt; ({
+    id: {type: GraphQLInt},
+    username: {type: GraphQLString},</code></pre>
+<pre><code class="lang-javascript">    videos: {
+      type: <span class="hljs-keyword">new</span> GraphQLList(VideoType),
+      resolve: (user) =&gt; store.getVideos(user.videos),
+    },</code></pre>
+<pre><code class="lang-javascript">    followers: {
+      type: <span class="hljs-keyword">new</span> GraphQLList(UserType),
+      resolve: (user) =&gt; store.getUsers(user.followers),
+    },
+  }),
+})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-26">
+    <section class="slide-content"><h3 id="the-root-query">The Root Query</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> QueryType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'Query'</span>,
+  fields: {</code></pre>
+<pre><code class="lang-javascript">    users: {
+      type: <span class="hljs-keyword">new</span> GraphQLList(UserType),
+      resolve: () =&gt; store.getAllUsers(),
+    },</code></pre>
+<pre><code class="lang-javascript">    user: {
+      type: UserType,
+      args: {
+        id: { type: <span class="hljs-keyword">new</span> GraphQLNonNull(GraphQLInt) }
+      },
+      resolve: (_, args) =&gt; store.getUser(args.id)
+    },
+  },
+})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-27">
+    <section class="slide-content"><h3 id="mutations">Mutations</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> MutationType = <span class="hljs-keyword">new</span> GraphQLObjectType({
+  name: <span class="hljs-string">'Mutaton'</span>,
+  fields: {</code></pre>
+<pre><code class="lang-javascript">    createUser: {
+      type: UserType,
+      args: {
+        name: { type: <span class="hljs-keyword">new</span> GraphQLNonNull(GraphQLString) },
+      },
+      resolve: (_, args) =&gt; store.createUser(args.name)
+    },</code></pre>
+<pre><code class="lang-javascript">  },
+})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden  " id="slide-28">
+    <section class="slide-content"><h3 id="the-schema">The Schema</h3>
+<p>The <code>query</code> field is required.</p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> schema = <span class="hljs-keyword">new</span> GraphQLSchema({
+  query: QueryType,
+  mutation: MutationType,
+})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-29">
+    <section class="slide-content"><h3 id="executing-a-query">Executing a Query</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {graphql} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql'</span>)</code></pre>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
+    query {
+        user(id: 1) {
+            username
+            videos {
+                title
+            }
+        }
+    }
+`</span></code></pre>
+<pre><code class="lang-javascript">graphql(schema, query)
+    .then((value) =&gt; <span class="hljs-built_in">console</span>.log(value))</code></pre>
+<p><strong>Result</strong></p>
+<pre><code class="lang-json">{
+  "<span class="hljs-attr">data</span>": {
+    "<span class="hljs-attr">user</span>": {
+      "<span class="hljs-attr">username</span>": <span class="hljs-string">"Jarret_Schmeler"</span>,
+      "<span class="hljs-attr">videos</span>": [
+        {
+          "<span class="hljs-attr">title</span>": <span class="hljs-string">"Ruggles of the King George"</span>
+        },
+        {
+          "<span class="hljs-attr">title</span>": <span class="hljs-string">"The Dreamlife of Apu"</span>
+        },
+        {
+          "<span class="hljs-attr">title</span>": <span class="hljs-string">"House of Endearment"</span>
+        }
+      ]
+    }
+  }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-30">
+    <section class="slide-content"><h3 id="executing-a-mutation">Executing a Mutation</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> query = <span class="hljs-string">`
+  mutation {
+    createUser(name: "Jeremy") {
+      id
+      username
+      videos {
+        title
+      }
+    }
+  }
+`</span></code></pre>
+<pre><code class="lang-javascript">graphql(schema, query)
+    .then((value) =&gt; <span class="hljs-built_in">console</span>.log(value))</code></pre>
+<p><strong>Result</strong></p>
+<pre><code class="lang-json">{
+  "<span class="hljs-attr">data</span>": {
+    "<span class="hljs-attr">createUser</span>": {
+      "<span class="hljs-attr">id</span>": <span class="hljs-number">15</span>,
+      "<span class="hljs-attr">username</span>": <span class="hljs-string">"Jeremy"</span>,
+      "<span class="hljs-attr">videos</span>": []
+    }
+  }
+}</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-31">
+    <section class="slide-content"><h3 id="let-s-make-a-web-server">Let&#39;s make a web server</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> Express = <span class="hljs-built_in">require</span>(<span class="hljs-string">'express'</span>)
+<span class="hljs-keyword">const</span> bodyParser = <span class="hljs-built_in">require</span>(<span class="hljs-string">'body-parser'</span>)
+<span class="hljs-keyword">const</span> {graphqlExpress, graphiqlExpress} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql-server-express'</span>)
+
+<span class="hljs-keyword">const</span> app = <span class="hljs-keyword">new</span> Express()</code></pre>
+<pre><code class="lang-javascript">app.use(<span class="hljs-string">'/graphql'</span>,
+  bodyParser.json(),
+  graphqlExpress({ schema }))</code></pre>
+<pre><code class="lang-javascript">app.use(<span class="hljs-string">'/graphiql'</span>,
+  graphiqlExpress({ endpointURL: <span class="hljs-string">'/graphql'</span> }))</code></pre>
+<pre><code class="lang-javascript">app.listen(<span class="hljs-number">5000</span>, () =&gt; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'Listening on port 5000'</span>))</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-32">
+    <section class="slide-content"><h3 id="the-new-way-to-write-a-schema">The new way to write a Schema</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> typeDefs = <span class="hljs-string">`
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  user(id: Int!): User
+  users: [User]
+}
+
+type Mutation {
+  createUser(name: String!): User
+}
+
+type User {
+  id: Int
+  username: String
+  videos: [Video]
+  followers: [User]
+}
+
+type Video {
+  id: Int
+  title: String
+  user: User
+  source: VideoSource
+}
+
+type VideoSource {
+  low: String
+  med: String
+  high: String
+}
+`</span></code></pre>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> resolvers = {
+  Query: {
+    user: (_, {id}) =&gt; store.getUser(id),
+    users: () =&gt; store.getAllUsers(),
+  },
+
+  Mutation: {
+    createUser: (_, {name}) =&gt; store.createUser(name),
+  },
+
+  User: {
+    videos: (user) =&gt; store.getVideos(user.videos),
+    followers: (user) =&gt; store.getUsers(user.followers),
+  },
+
+  Video: {
+    user: (video) =&gt; store.getUser(video.user),
+  },
+}</code></pre>
+<pre><code class="lang-javascript"><span class="hljs-keyword">const</span> {makeExecutableSchema} = <span class="hljs-built_in">require</span>(<span class="hljs-string">'graphql-tools'</span>)
+<span class="hljs-keyword">const</span> schema = makeExecutableSchema({typeDefs, resolvers})</code></pre>
+</section>
+  </div>
+  <div class="slide hidden" id="slide-33">
+    <section class="slide-content"><h2 id="questions-">Questions?</h2>
+</section>
+  </div>
+  <div class="slide hidden author-slide" id="slide-34">
+    <section class="slide-content"><div class="author">
+  <h1 class="name">George Czabania</h1>
+    <h3 class="twitter">
+      <a href="http://twitter.com/@stayradiated">@stayradiated</a>
+    </h3>
+</div>
+</section>
+  </div>
+
+  <div class="controls">
+    <div class="arrow prev"></div>
+    <div class="arrow next"></div>
+  </div>
+
+
+  <script type="text/javascript">
+    /**
+ * Returns the current page number of the presentation.
+ */
+function currentPosition() {
+  return parseInt(document.querySelector('.slide:not(.hidden)').id.slice(6));
+}
+
+
+/**
+ * Navigates forward n pages
+ * If n is negative, we will navigate in reverse
+ */
+function navigate(n) {
+  var position = currentPosition();
+  var numSlides = document.getElementsByClassName('slide').length;
+
+  /* Positions are 1-indexed, so we need to add and subtract 1 */
+  var nextPosition = (position - 1 + n) % numSlides + 1;
+
+  /* Normalize nextPosition in-case of a negative modulo result */
+  nextPosition = (nextPosition - 1 + numSlides) % numSlides + 1;
+
+  document.getElementById('slide-' + position).classList.add('hidden');
+  document.getElementById('slide-' + nextPosition).classList.remove('hidden');
+
+  updateProgress();
+  updateURL();
+  updateTabIndex();
+}
+
+
+/**
+ * Updates the current URL to include a hashtag of the current page number.
+ */
+function updateURL() {
+  try {
+    window.history.replaceState({} , null, '#' + currentPosition());
+  } catch (e) {
+    window.location.hash = currentPosition();
+  }
+}
+
+
+/**
+ * Sets the progress indicator.
+ */
+function updateProgress() {
+  var progressBar = document.querySelector('.progress-bar');
+
+  if (progressBar !== null) {
+    var numSlides = document.getElementsByClassName('slide').length;
+    var position = currentPosition() - 1;
+    var percent = (numSlides === 1) ? 100 : 100 * position / (numSlides - 1);
+    progressBar.style.width = percent.toString() + '%';
+  }
+}
+
+
+/**
+ * Removes tabindex property from all links on the current slide, sets
+ * tabindex = -1 for all links on other slides. Prevents slides from appearing
+ * out of control.
+ */
+function updateTabIndex() {
+  var allLinks = document.querySelectorAll('.slide a');
+  var position = currentPosition();
+  var currentPageLinks = document.getElementById('slide-' + position).querySelectorAll('a');
+  var i;
+
+  for (i = 0; i < allLinks.length; i++) {
+    allLinks[i].setAttribute('tabindex', -1);
+  }
+
+  for (i = 0; i < currentPageLinks.length; i++) {
+    currentPageLinks[i].removeAttribute('tabindex');
+  }
+}
+
+/**
+ * Determines whether or not we are currently in full screen mode
+ */
+function isFullScreen() {
+  return document.fullscreenElement ||
+         document.mozFullScreenElement ||
+         document.webkitFullscreenElement ||
+         document.msFullscreenElement;
+}
+
+/**
+ * Toggle fullScreen mode on document element.
+ * Works on chrome (>= 15), firefox (>= 9), ie (>= 11), opera(>= 12.1), safari (>= 5).
+ */
+function toggleFullScreen() {
+  /* Convenient renames */
+  var docElem = document.documentElement;
+  var doc = document;
+
+  docElem.requestFullscreen =
+      docElem.requestFullscreen ||
+      docElem.msRequestFullscreen ||
+      docElem.mozRequestFullScreen ||
+      docElem.webkitRequestFullscreen.bind(docElem, Element.ALLOW_KEYBOARD_INPUT);
+
+  doc.exitFullscreen =
+      doc.exitFullscreen ||
+      doc.msExitFullscreen ||
+      doc.mozCancelFullScreen ||
+      doc.webkitExitFullscreen;
+
+  isFullScreen() ? doc.exitFullscreen() : docElem.requestFullscreen();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Update the tabindex to prevent weird slide transitioning
+  updateTabIndex();
+
+  // If the location hash specifies a page number, go to it.
+  var page = window.location.hash.slice(1);
+  if (page) {
+    navigate(parseInt(page) - 1);
+  }
+
+  document.onkeydown = function (e) {
+    var kc = e.keyCode;
+
+    // left, down, H, J, backspace, PgUp - BACK
+    // up, right, K, L, space, PgDn - FORWARD
+    // enter - FULLSCREEN
+    if (kc === 37 || kc === 40 || kc === 8 || kc === 72 || kc === 74 || kc === 33) {
+      navigate(-1);
+    } else if (kc === 38 || kc === 39 || kc === 32 || kc === 75 || kc === 76 || kc === 34) {
+      navigate(1);
+    } else if (kc === 13) {
+      toggleFullScreen();
+    }
+  };
+
+  if (document.querySelector('.next') && document.querySelector('.prev')) {
+    document.querySelector('.next').onclick = function (e) {
+      e.preventDefault();
+      navigate(1);
+    };
+
+    document.querySelector('.prev').onclick = function (e) {
+      e.preventDefault();
+      navigate(-1);
+    };
+  }
+});
+
+
+  </script>
+</body>
+</html>

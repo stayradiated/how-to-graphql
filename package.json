@@ -14,11 +14,15 @@
   },
   "homepage": "https://github.com/stayradiated/how-to-graphql#readme",
   "dependencies": {
-    "apollo-server": "^0.3.3",
-    "express": "4.14.0",
-    "graphql": "0.7.2",
-    "graphql-server-express": "0.4.3",
+    "body-parser": "^1.15.2",
+    "cached-promise": "^1.0.0",
+    "camelize": "^1.0.0",
+    "casual": "^1.5.6",
+    "express": "^4.14.0",
+    "graphql": "^0.7.2",
+    "graphql-server-express": "^0.4.3",
     "graphql-tools": "^0.8.0",
-    "producthunt": "0.2.0"
+    "producthunt": "^0.2.0",
+    "titlegen": "^0.1.2"
   }
 }
